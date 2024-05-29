@@ -1,7 +1,9 @@
 import BigCoffee from "../../assets/Big-coffee.svg";
-import Expresso from "../../assets/coffees/Expresso.svg";
-import { Coffee, Package, ShoppingCart, ShoppingCartSimple, Timer } from "@phosphor-icons/react";
-import { BenefitsUpperPart, BottomHomeContainer, CoffeeCard, DescriptionLabel, IconContainer1, IconContainer2, IconContainer3, IconContainer4, ImageContainerUpperPart, MainCoffeesContainer, Price, ShoppingInfos, TitlesUpperPart, TypeSpan, UpperHomeContainer } from "./styles";
+import { Coffee, Package, ShoppingCart, Timer } from "@phosphor-icons/react";
+import { BenefitsUpperPart, BottomHomeContainer, IconContainer1, IconContainer2, IconContainer3, IconContainer4, ImageContainerUpperPart, MainCoffeesContainer, TitlesUpperPart, UpperHomeContainer } from "./styles";
+
+import * as Coffees from "../../CoffeImport.ts";
+import { CoffeeCard } from "./components/CoffeeCard/index.tsx";
 
 export function Home() {
   return (
@@ -43,26 +45,13 @@ export function Home() {
       <BottomHomeContainer>
         <h1>Nossos cafés</h1>
         <MainCoffeesContainer>
-          <CoffeeCard>
-            <img src={Expresso} alt="Coffee photo" />
-            <TypeSpan>TRADICIONAL</TypeSpan>
-            <h3>Expresso Tradicional</h3>
-            <DescriptionLabel>O tradicional café feito com água quente e grãos moídos</DescriptionLabel>
-            <ShoppingInfos>
-              <div>
-                <span>R$</span>
-                <Price>9,90</Price>
-              </div>
-              <div>
-                <button>-</button>
-                <p>1</p>
-                <button>+</button>
-              </div>
-              <button>
-                <ShoppingCartSimple size={20} color="white" weight="fill" />
-              </button>
-            </ShoppingInfos>
-          </CoffeeCard>
+          <CoffeeCard
+            imgSrc={Coffees.Expresso}
+            type="TRADICIONAL"
+            title="Expresso Tradicional"
+            description="O tradicional café feito com água quente e grãos moídos"
+            price="9,90"
+          />
         </MainCoffeesContainer>
       </BottomHomeContainer>
     </>
