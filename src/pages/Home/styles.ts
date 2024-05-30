@@ -94,4 +94,6 @@ export const MainCoffeesContainer = styled.main`
 
   padding-top: 3.375rem;
   gap: 2rem;
+
+  
 `;
