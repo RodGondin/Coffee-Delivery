@@ -1,9 +1,9 @@
 import { ShoppingCartSimple } from "@phosphor-icons/react";
-import { CoffeeCardContainer, DescriptionLabel, Price, ShoppingInfos, TypeSpan } from "./styles";
+import { CoffeeCardContainer, DescriptionLabel, Price, ShoppingInfos, TypeDiv, TypeSpan } from "./styles";
 
 interface CoffeeCardProps {
   imgSrc: string;
-  type: string;
+  type: string[];
   title: string;
   description: string;
   price: string;
@@ -13,7 +13,11 @@ export function CoffeeCard({ imgSrc, type, title, description, price }: CoffeeCa
   return (
     <CoffeeCardContainer>
       <img src={imgSrc} alt="Coffee photo" />
-      <TypeSpan>{type}</TypeSpan>
+      <TypeDiv>
+        {type.map((type, index) => (
+          <TypeSpan key={index}>{type}</TypeSpan>
+        ))}
+      </TypeDiv>
       <h3>{title}</h3>
       <DescriptionLabel>{description}</DescriptionLabel>
       <ShoppingInfos>

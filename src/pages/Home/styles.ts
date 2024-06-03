@@ -89,11 +89,9 @@ export const BottomHomeContainer = styled.div`
 `;
 
 export const MainCoffeesContainer = styled.main`
-  display: flex;
-  flex-direction: row;
-
-  padding-top: 3.375rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 2rem;
 
-  
+  padding-top: 3.375rem;
 `;

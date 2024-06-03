@@ -16,7 +16,7 @@ export const CoffeeCardContainer = styled.div`
 
   img {
     margin-top: -18px;
-    width: 7.2rem;
+    width: 7rem;
   }
 
   h3 {
@@ -34,8 +34,21 @@ export const DescriptionLabel = styled.p`
   font-size: 14px;
   font-weight: 400;
   color: ${(props) => props.theme["base-label"]};
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   margin-bottom: 30px;
+`;
+
+export const TypeDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+
+  margin-top: 15px;
+  margin-bottom: 18px;
+  gap: 0.3rem;
 `;
 
 export const TypeSpan = styled.span`
@@ -43,8 +56,6 @@ export const TypeSpan = styled.span`
   color: ${(props) => props.theme["yellow-dark"]};
   padding: 4px 8px;
   border-radius: 25px;
-  margin-top: 15px;
-  margin-bottom: 18px;
   font-size: 0.625rem;
   font-weight: 600;
 `;
