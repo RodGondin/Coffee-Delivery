@@ -1,11 +1,16 @@
 import Logo from "../../assets/Logo.svg";
 import { MapPin, ShoppingCart } from "@phosphor-icons/react";
-import { HeaderContainer } from "./styles";
+import { CartAmountSpan, HeaderContainer } from "./styles";
 import { useTheme } from "styled-components";
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { CoffeeContext, CoffeeContextType } from "../../contexts/CoffeeContext";
 
 export function Header() {
+  const { cart } = useContext(CoffeeContext) as CoffeeContextType;
   const theme = useTheme();
+
+  const cartTotalAmount = cart.reduce((total, coffee) => total + coffee.quantity, 0);
 
   return (
     <HeaderContainer>
@@ -14,7 +19,10 @@ export function Header() {
       </NavLink>
       <nav>
         <span><MapPin size={20} color={theme['purple-dark']} weight="fill" />Porto Alegre, RS</span>
-        <NavLink to="/cart" title="Carrinho"><ShoppingCart size={20} color={theme['yellow-dark']} weight="fill" /></NavLink>
+        <div>
+          <NavLink to="/cart" title="Carrinho"><ShoppingCart size={20} color={theme['yellow-dark']} weight="fill" /></NavLink>
+          {cartTotalAmount > 0 && <CartAmountSpan>{cartTotalAmount}</CartAmountSpan>}
+        </div>
       </nav>
     </HeaderContainer>
   )

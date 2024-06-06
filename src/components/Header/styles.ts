@@ -39,4 +39,25 @@ export const HeaderContainer = styled.header`
     color: ${(props) => props.theme['purple-dark']};
     border: 1px solid transparent;
   }
+
+  div {
+    position: relative;
+  }
+`
+
+export const CartAmountSpan = styled.span`
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 500;
+  color: ${(props) => props.theme['white']};
+  background-color:  ${(props) => props.theme['yellow-dark']};
 `
