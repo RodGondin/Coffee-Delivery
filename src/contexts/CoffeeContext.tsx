@@ -1,4 +1,4 @@
-import { ReactNode, createContext } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 import * as Coffees from "../CoffeImport.ts";
 
@@ -16,8 +16,15 @@ export interface CoffeeItem {
   price: number;
 }
 
+export interface CoffeeCart {
+  coffeeName: string;
+  quantity: number;
+}
+
 export interface CoffeeContextType {
   CoffeesList: CoffeeItem[];
+  cart: CoffeeCart[];
+  setCart: React.Dispatch<React.SetStateAction<CoffeeCart[]>>
 }
 
 const CoffeesList: CoffeeItem[] = [
@@ -122,9 +129,12 @@ const CoffeesList: CoffeeItem[] = [
 ];
 
 export function CoffeeContextProvider({ children }: CoffeeContextProviderProps) {
+  const [cart, setCart] = useState<CoffeeCart[]>([]);
+
+  useEffect(() => { console.log(cart) }, [cart]);
 
   return (
-    <CoffeeContext.Provider value={{ CoffeesList }}>
+    <CoffeeContext.Provider value={{ CoffeesList, cart, setCart }}>
       {children}
     </CoffeeContext.Provider>
   )

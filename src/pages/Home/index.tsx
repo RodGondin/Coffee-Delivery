@@ -1,7 +1,17 @@
 import { useContext } from "react";
 import BigCoffee from "../../assets/Big-coffee.svg";
 import { Coffee, Package, ShoppingCart, Timer } from "@phosphor-icons/react";
-import { BenefitsUpperPart, BottomHomeContainer, IconContainer1, IconContainer2, IconContainer3, IconContainer4, ImageContainerUpperPart, MainCoffeesContainer, TitlesUpperPart, UpperHomeContainer } from "./styles";
+import {
+  BenefitsUpperPart,
+  BottomHomeContainer,
+  IconContainer1,
+  IconContainer2,
+  IconContainer3, IconContainer4,
+  ImageContainerUpperPart,
+  MainCoffeesContainer,
+  TitlesUpperPart,
+  UpperHomeContainer
+} from "./styles";
 
 import { CoffeeCard } from "./components/CoffeeCard/index.tsx";
 import { CoffeeContext, CoffeeItem } from "../../contexts/CoffeeContext.tsx";
@@ -15,7 +25,6 @@ export function Home() {
 
     const { CoffeesList } = context;
 
-    console.log(CoffeesList);
     return (
       <>
         <UpperHomeContainer>
