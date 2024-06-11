@@ -18,7 +18,7 @@ export function Header() {
         <img src={Logo} alt="Logo Coffee Delivery" />
       </NavLink>
       <nav>
-        <span><MapPin size={20} color={theme['purple-dark']} weight="fill" />Porto Alegre, RS</span>
+        <span><MapPin size={20} color={theme['purple']} weight="fill" />Porto Alegre, RS</span>
         <div>
           <NavLink to="/cart" title="Carrinho"><ShoppingCart size={20} color={theme['yellow-dark']} weight="fill" /></NavLink>
           {cartTotalAmount > 0 && <CartAmountSpan>{cartTotalAmount}</CartAmountSpan>}

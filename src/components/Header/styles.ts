@@ -32,6 +32,7 @@ export const HeaderContainer = styled.header`
   span:first-child {
     background-color: ${(props) => props.theme['purple-light']};
     padding: 8px;
+    font-size: 14px;
     border-radius: 6px;
     display: flex;
     align-items: center;
