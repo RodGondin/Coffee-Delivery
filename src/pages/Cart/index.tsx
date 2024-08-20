@@ -1,10 +1,27 @@
 import { Bank, CreditCard, CurrencyDollar, MapPinLine, Money, Trash } from "@phosphor-icons/react";
 import { AddressPaymentBox, AddressSection, AreaCityUfRow, ButtonQuantityDiv, ButtonTrashCart, CartContainer, CartSummary, CartSummaryDiv, CoffeeCardSummary, CoffeeInfosBox, CoffeePaymentInfos, CoffeesSelectedBox, NumberComplementRow, PaymentOptionButton, PaymentOptionsDiv, PaymentSection, PricesInfo, TitlePriceInfo, TitlesSections, TotalPricesInfo } from "./styles";
 import { useTheme } from "styled-components";
-import { Capuccino } from "../../CoffeImport";
+import { useContext, useEffect, useState } from "react";
+import { CoffeeContext, CoffeeContextType } from "../../contexts/CoffeeContext";
 
 export function Cart() {
   const theme = useTheme();
+  const { cart, setCart, CoffeesList } = useContext(CoffeeContext) as CoffeeContextType;
+  const [totalValue, setTotalValue] = useState(0);
+
+  useEffect(() => {
+    const newTotalValue = cart.reduce((acc, item) => {
+      const coffeeDetails = CoffeesList.find(
+        (coffee) => coffee.title.toLowerCase() === item.coffeeName.toLowerCase()
+      );
+      if (coffeeDetails) {
+        return acc + coffeeDetails.price * item.quantity;
+      }
+      return acc;
+    }, 0);
+
+    setTotalValue(newTotalValue);
+  }, [cart, CoffeesList]);
 
   return (
     <CartContainer>
@@ -64,54 +81,59 @@ export function Cart() {
         <CartSummaryDiv>
 
           <CoffeesSelectedBox>
-            <CoffeeCardSummary>
-              <img src={Capuccino} alt="coffee" />
-              <CoffeeInfosBox>
-                <p>Expresso Tradicional</p>
+            {cart.map((item, index) => {
+              const coffeeDetails = CoffeesList.find(
+                (coffee) => coffee.title.toLowerCase() === item.coffeeName.toLowerCase()
+              );
 
-                <div>
-                  <ButtonQuantityDiv>
-                    <button>-</button>
-                    <p>{1}</p>
-                    <button>+</button>
-                  </ButtonQuantityDiv>
-                  <ButtonTrashCart>
-                    <Trash size={16} color={theme['purple']} />
-                    REMOVER
-                  </ButtonTrashCart>
-                </div>
+              const handleRemoveItem = () => {
+                setCart(cart.filter((cartItem) => cartItem.coffeeName !== item.coffeeName));
+              };
 
-              </CoffeeInfosBox>
-              <span>R$ 9,90</span>
-            </CoffeeCardSummary>
+              const handleAddItemQuantity = () => {
+                setCart(cart.map((cartItem) =>
+                  cartItem.coffeeName === item.coffeeName
+                    ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                    : cartItem
+                ));
+              };
 
-            <CoffeeCardSummary>
-              <img src={Capuccino} alt="coffee" />
-              <CoffeeInfosBox>
-                <p>Expresso Tradicional</p>
+              const handleSubItemQuantity = () => {
+                setCart(cart.map((cartItem) =>
+                  cartItem.coffeeName === item.coffeeName && cartItem.quantity > 1
+                    ? { ...cartItem, quantity: cartItem.quantity - 1 }
+                    : cartItem
+                ));
+              };
 
-                <div>
-                  <ButtonQuantityDiv>
-                    <button>-</button>
-                    <p>{1}</p>
-                    <button>+</button>
-                  </ButtonQuantityDiv>
-                  <ButtonTrashCart>
-                    <Trash size={16} color={theme['purple']} />
-                    REMOVER
-                  </ButtonTrashCart>
-                </div>
-
-              </CoffeeInfosBox>
-              <span>R$ 9,90</span>
-            </CoffeeCardSummary>
+              return (
+                <CoffeeCardSummary key={index}>
+                  {coffeeDetails && <img src={coffeeDetails.imgSrc} alt={item.coffeeName} />}
+                  <CoffeeInfosBox>
+                    <p>{item.coffeeName}</p>
+                    <div>
+                      <ButtonQuantityDiv>
+                        <button onClick={handleSubItemQuantity}>-</button>
+                        <p>{item.quantity}</p>
+                        <button onClick={handleAddItemQuantity}>+</button>
+                      </ButtonQuantityDiv>
+                      <ButtonTrashCart onClick={handleRemoveItem}>
+                        <Trash size={16} color={theme['purple']} />
+                        REMOVER
+                      </ButtonTrashCart>
+                    </div>
+                  </CoffeeInfosBox>
+                  {coffeeDetails && <span>R$ {coffeeDetails.price.toFixed(2)}</span>}
+                </CoffeeCardSummary>
+              );
+            })}
           </CoffeesSelectedBox>
 
           <CoffeePaymentInfos>
             <div>
               <div>
                 <TitlePriceInfo>Total de itens</TitlePriceInfo>
-                <PricesInfo>R$ 29,70</PricesInfo>
+                <PricesInfo>R$ {totalValue.toFixed(2).replace(".", ",")}</PricesInfo>
               </div>
               <div>
                 <TitlePriceInfo>Entrega</TitlePriceInfo>
@@ -119,15 +141,16 @@ export function Cart() {
               </div>
               <div>
                 <TotalPricesInfo>Total</TotalPricesInfo>
-                <TotalPricesInfo>R$ 33,20</TotalPricesInfo>
+                <TotalPricesInfo>R$ {(totalValue + 3.50).toFixed(2).replace(".", ",")}</TotalPricesInfo>
               </div>
             </div>
             <button>CONFIRMAR PEDIDO</button>
           </CoffeePaymentInfos>
 
+
         </CartSummaryDiv>
       </CartSummary>
 
-    </CartContainer>
+    </CartContainer >
   )
 }
