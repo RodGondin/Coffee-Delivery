@@ -57,7 +57,7 @@ Siga os passos abaixo para rodar o projeto localmente:
 5. Abra o navegador e acesse:
 
    ```arduino
-   http://localhost:3000
+   http://localhost:5173
    ```
 
 ## Tecnologias Utilizadas
