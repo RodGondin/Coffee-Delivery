@@ -29,6 +29,7 @@ import { CoffeeContext, CoffeeContextType } from "../../contexts/CoffeeContext";
 import { useForm } from "react-hook-form";
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 
 const addressSchema = z.object({
   CEP: z
@@ -52,6 +53,8 @@ export function Cart() {
   const theme = useTheme();
   const { cart, setCart, CoffeesList } = useContext(CoffeeContext) as CoffeeContextType;
   const [totalValue, setTotalValue] = useState(0);
+  const [paymentType, setPaymentType] = useState('');
+  const navigate = useNavigate();
 
   const { handleSubmit, register, reset, formState: { errors } } = useForm<AddressFormData>({
     resolver: zodResolver(addressSchema),
@@ -72,10 +75,28 @@ export function Cart() {
   }, [cart, CoffeesList]);
 
   function onSubmitHandle(data: AddressFormData) {
-    console.log("Dados do formulário:", data);
-    // Passar para tela de confirmação
+    if (!paymentType) {
+      alert("Por favor, selecione um método de pagamento.");
+      return;
+    }
+
+    if (cart.length < 1) {
+      alert("Por favor, selecione um café na home para concluir o pagamento.");
+      return;
+    }
+
     reset();
+    navigate('/success', {
+      state: {
+        addressData: data,
+        paymentType,
+      },
+    });
   }
+
+  const handlePaymentSelection = (type: string) => {
+    setPaymentType(type);
+  };
 
   return (
     <CartContainer>
@@ -131,7 +152,6 @@ export function Cart() {
               </InputWrapper>
             </AreaCityUfRow>
           </form>
-
         </AddressSection>
 
         <PaymentSection>
@@ -143,13 +163,22 @@ export function Cart() {
             </div>
           </div>
           <PaymentOptionsDiv>
-            <PaymentOptionButton>
+            <PaymentOptionButton
+              onClick={() => handlePaymentSelection('Cartão de crédito')}
+              className={paymentType === 'Cartão de crédito' ? 'active' : ''}
+            >
               <span><CreditCard size={20} color={theme['purple']} /></span> CARTÃO DE CRÉDITO
             </PaymentOptionButton>
-            <PaymentOptionButton>
+            <PaymentOptionButton
+              onClick={() => handlePaymentSelection('Cartão de débito')}
+              className={paymentType === 'Cartão de débito' ? 'active' : ''}
+            >
               <span><Bank size={20} color={theme['purple']} /></span> CARTÃO DE DÉBITO
             </PaymentOptionButton>
-            <PaymentOptionButton>
+            <PaymentOptionButton
+              onClick={() => handlePaymentSelection('Dinheiro')}
+              className={paymentType === 'Dinheiro' ? 'active' : ''}
+            >
               <span><Money size={20} color={theme['purple']} /></span> DINHEIRO
             </PaymentOptionButton>
           </PaymentOptionsDiv>
@@ -160,7 +189,6 @@ export function Cart() {
         <TitlesSections>Cafés selecionados</TitlesSections>
 
         <CartSummaryDiv>
-
           <CoffeesSelectedBox>
             {cart.map((item, index) => {
               const coffeeDetails = CoffeesList.find(
@@ -227,11 +255,8 @@ export function Cart() {
             </div>
             <button onClick={handleSubmit(onSubmitHandle)}>CONFIRMAR PEDIDO</button>
           </CoffeePaymentInfos>
-
-
         </CartSummaryDiv>
       </CartSummary>
-
-    </CartContainer >
-  )
+    </CartContainer>
+  );
 }

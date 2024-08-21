@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 
 import * as Coffees from "../CoffeImport.ts";
 
@@ -130,8 +130,6 @@ const CoffeesList: CoffeeItem[] = [
 
 export function CoffeeContextProvider({ children }: CoffeeContextProviderProps) {
   const [cart, setCart] = useState<CoffeeCart[]>([]);
-
-  useEffect(() => { console.log(cart) }, [cart]);
 
   return (
     <CoffeeContext.Provider value={{ CoffeesList, cart, setCart }}>

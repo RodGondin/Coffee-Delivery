@@ -149,7 +149,12 @@ export const PaymentOptionButton = styled.div`
     margin-right: 0.5rem;
   }
 
-  &:hover {
+  &.active {
+    background-color: ${(props) => props.theme["purple-light"]};
+    border: 1px solid ${(props) => props.theme["purple"]};
+  }
+
+  &:hover:not(.active) {
     background-color: ${(props) => props.theme["base-hover"]};
   }
 `;
