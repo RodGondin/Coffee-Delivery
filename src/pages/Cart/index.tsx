@@ -1,13 +1,61 @@
 import { Bank, CreditCard, CurrencyDollar, MapPinLine, Money, Trash } from "@phosphor-icons/react";
-import { AddressPaymentBox, AddressSection, AreaCityUfRow, ButtonQuantityDiv, ButtonTrashCart, CartContainer, CartSummary, CartSummaryDiv, CoffeeCardSummary, CoffeeInfosBox, CoffeePaymentInfos, CoffeesSelectedBox, NumberComplementRow, PaymentOptionButton, PaymentOptionsDiv, PaymentSection, PricesInfo, TitlePriceInfo, TitlesSections, TotalPricesInfo } from "./styles";
+import {
+  AddressPaymentBox,
+  AddressSection,
+  AreaCityUfRow,
+  ButtonQuantityDiv,
+  ButtonTrashCart,
+  CartContainer,
+  CartSummary,
+  CartSummaryDiv,
+  CoffeeCardSummary,
+  CoffeeInfosBox,
+  CoffeePaymentInfos,
+  CoffeesSelectedBox,
+  ErrorMessage,
+  InputWrapper,
+  NumberComplementRow,
+  PaymentOptionButton,
+  PaymentOptionsDiv,
+  PaymentSection,
+  PricesInfo,
+  TitlePriceInfo,
+  TitlesSections,
+  TotalPricesInfo
+} from "./styles";
 import { useTheme } from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { CoffeeContext, CoffeeContextType } from "../../contexts/CoffeeContext";
+import { useForm } from "react-hook-form";
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const addressSchema = z.object({
+  CEP: z
+    .string()
+    .min(1, "O campo CEP é obrigatório")
+    .regex(/^\d{5}-\d{3}$/, "CEP inválido"),
+  Rua: z.string().min(1, "O campo Rua é obrigatório"),
+  Numero: z.string().min(1, "O campo Número é obrigatório"),
+  Complemento: z.string().optional(),
+  Bairro: z.string().min(1, "O campo Bairro é obrigatório"),
+  Cidade: z.string().min(1, "O campo Cidade é obrigatório"),
+  UF: z
+    .string()
+    .min(2, "UF deve ter 2 caracteres")
+    .max(2, "UF deve ter 2 caracteres"),
+});
+
+type AddressFormData = z.infer<typeof addressSchema>;
 
 export function Cart() {
   const theme = useTheme();
   const { cart, setCart, CoffeesList } = useContext(CoffeeContext) as CoffeeContextType;
   const [totalValue, setTotalValue] = useState(0);
+
+  const { handleSubmit, register, reset, formState: { errors } } = useForm<AddressFormData>({
+    resolver: zodResolver(addressSchema),
+  });
 
   useEffect(() => {
     const newTotalValue = cart.reduce((acc, item) => {
@@ -23,9 +71,14 @@ export function Cart() {
     setTotalValue(newTotalValue);
   }, [cart, CoffeesList]);
 
+  function onSubmitHandle(data: AddressFormData) {
+    console.log("Dados do formulário:", data);
+    // Passar para tela de confirmação
+    reset();
+  }
+
   return (
     <CartContainer>
-
       <AddressPaymentBox>
         <TitlesSections>Complete seu pedido</TitlesSections>
 
@@ -38,19 +91,47 @@ export function Cart() {
             </div>
           </div>
 
-          <form>
-            <input type="text" name="CEP" placeholder="CEP" />
-            <input type="text" name="Rua" placeholder="Rua" />
+          <form onSubmit={handleSubmit(onSubmitHandle)}>
+            <InputWrapper>
+              <input type="text" id="CEP" placeholder="CEP" {...register('CEP')} />
+              {errors.CEP && <ErrorMessage>{errors.CEP.message}</ErrorMessage>}
+            </InputWrapper>
+
+            <InputWrapper>
+              <input type="text" id="Rua" placeholder="Rua" {...register('Rua')} />
+              {errors.Rua && <ErrorMessage>{errors.Rua.message}</ErrorMessage>}
+            </InputWrapper>
+
             <NumberComplementRow>
-              <input type="text" name="Numero" placeholder="Número" />
-              <input type="text" name="Complemento" placeholder="Complemento" />
+              <InputWrapper>
+                <input type="text" id="Numero" placeholder="Número" {...register('Numero')} />
+                {errors.Numero && <ErrorMessage>{errors.Numero.message}</ErrorMessage>}
+              </InputWrapper>
+
+              <InputWrapper>
+                <input type="text" id="Complemento" placeholder="Complemento" {...register('Complemento')} />
+                {errors.Complemento && <ErrorMessage>{errors.Complemento.message}</ErrorMessage>}
+              </InputWrapper>
             </NumberComplementRow>
+
             <AreaCityUfRow>
-              <input type="text" name="Bairro" placeholder="Bairro" />
-              <input type="text" name="Cidade" placeholder="Cidade" />
-              <input type="text" name="UF" placeholder="UF" />
+              <InputWrapper>
+                <input type="text" id="Bairro" placeholder="Bairro" {...register('Bairro')} />
+                {errors.Bairro && <ErrorMessage>{errors.Bairro.message}</ErrorMessage>}
+              </InputWrapper>
+
+              <InputWrapper>
+                <input type="text" id="Cidade" placeholder="Cidade" {...register('Cidade')} />
+                {errors.Cidade && <ErrorMessage>{errors.Cidade.message}</ErrorMessage>}
+              </InputWrapper>
+
+              <InputWrapper>
+                <input type="text" id="UF" placeholder="UF" {...register('UF')} />
+                {errors.UF && <ErrorMessage>{errors.UF.message}</ErrorMessage>}
+              </InputWrapper>
             </AreaCityUfRow>
           </form>
+
         </AddressSection>
 
         <PaymentSection>
@@ -144,7 +225,7 @@ export function Cart() {
                 <TotalPricesInfo>R$ {(totalValue + 3.50).toFixed(2).replace(".", ",")}</TotalPricesInfo>
               </div>
             </div>
-            <button>CONFIRMAR PEDIDO</button>
+            <button onClick={handleSubmit(onSubmitHandle)}>CONFIRMAR PEDIDO</button>
           </CoffeePaymentInfos>
 
 

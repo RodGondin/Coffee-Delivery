@@ -55,9 +55,15 @@ export const AddressSection = styled.section`
       border: 1px solid ${(props) => props.theme["base-button"]};
       border-radius: 4px;
       background-color: ${(props) => props.theme["base-input"]};
+      color: ${(props) => props.theme["base-text"]};
+
+      &:focus {
+        border: 1px solid ${(props) => props.theme["yellow-dark"]};
+        outline: none;
+      }
     }
 
-    input[name="CEP"] {
+    input[id="CEP"] {
       max-width: 33%;
     }
   }
@@ -73,6 +79,20 @@ export const AreaCityUfRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1.65fr 0.35fr;
   gap: 0.5rem;
+`;
+
+export const InputWrapper = styled.div`
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ErrorMessage = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+  color: red;
+  margin-top: 4px; /* Ajuste de margem para espaçar corretamente */
 `;
 
 export const PaymentSection = styled.section`
