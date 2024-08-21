@@ -2,6 +2,8 @@
 
 Este projeto é uma aplicação web para um serviço de entrega de café, onde os usuários podem selecionar cafés, adicionar ao carrinho, escolher a forma de pagamento e confirmar o pedido. Após a confirmação, os detalhes do pedido e o método de pagamento são exibidos em uma tela de sucesso.
 
+Link do projeto hospedado na vercel: https://coffee-delivery-agc6vr0ia-rodgondins-projects.vercel.app/
+
 ## Índice
 
 - [Sobre o Projeto](#sobre-o-projeto)
